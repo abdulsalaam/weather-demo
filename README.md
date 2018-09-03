@@ -10,6 +10,9 @@ A lean application for building RESTful APIs (Microservice) in Node.js using [ha
  - [node.js](https://nodejs.org/en/download/current/) >= `8.4.0`
  - [yarn](https://yarnpkg.com/en/docs/install) >= `0.27.5`
  
+## pull code from git
+$ sudo git clone https://github.com/abdulsalaam/weather-demo.git
+
 ## Getting Started
  $ yarn npm install | npm install
 # Start Server
