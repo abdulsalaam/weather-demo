@@ -1,0 +1,10 @@
+{
+  "app": {
+    "port": "3030",
+    "name": "weather-demo",
+    "logLevel": "info"
+  },
+  "openWeather": {
+    "apiKey": "177c967a151850736ab7fc924758d595"
+  }
+}

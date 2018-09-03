@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>Weather App</title>
+  
+  
+  <link rel='stylesheet' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
+
+      <link rel="stylesheet" href="css/style.css">
+
+  
+</head>
+
+<body>
+
+  <html lang="en">
+
+<head>
+  <title> Weather Demo </title>
+  <!--Make accessible on mobile  -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--- Help from Adoyle2014, davidamandoestra--->
+</head>
+
+<body>
+  <!-- 
+  1) Get user IP and lat / long
+  2) Send lat / long to weather API, retrieve location
+  3) Get current and daily temperature min / max
+  4) Get humidity, pressure
+  5) Get wind speed, wind direction, wind chill 
+  6) Get rain / snow / cloud cover
+  7) Get sunrise / sunset time
+  8) Get current time
+  9) Create toggle switch for F / C, set precision to integers for F, tenths for C
+-->
+
+  <div class="container mainContainer" id="mainPage">
+
+    <div class="col-xs-12 col-md-3 mobileCentering">
+      <div class="row row-top-margin-20">
+        <div class="col-md-12">
+          <span class="location"> <p id = "location">City, State (Zip) Weather</p></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <span class="forecastTime"><p id="forecastTime">Forecast Time</p></span>
+        </div>
+        <div class="row">
+          <div class="col-xs-6 col-md-6 pull-left">
+            <span><div id = "icon"></div></span>
+          </div>
+          <div class="col col-xs-6 col-md-6 pull-left">
+            <span class="currentTemp"><p  id="currentTemp">Temp</p></span>
+          </div>
+        </div>
+        <div>
+          <div class="col col-xs-12">
+            <span class="weatherDescripNow"><p id="weatherDescripNow">Weather Description</p></span>
+          </div>
+        </div>
+        <div>
+          <div class="col col-xs-6 col-md-6">
+            <p class="wind">Wind</p>
+            <span class="wind"><p id="windNow">D XXX mph</p></span>
+          </div>
+          <div class="col col-xs-6 col-md-6">
+            <p class="humidity">Humidity</p>
+            <span class="humidity"><p id="humidityNow">H %</p></span>
+          </div>
+        </div>
+  
+      </div>
+    </div>
+    <!-- End of well -->
+    <!-- End of left column -->
+
+    <div class="col-xs-12 col-md-8 col-md-offset-1">
+      <h3 id="forecastTableHeader">Forecast Table</h3>
+      <table id="forecastTable" class="table table-condensed table-responsive">
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>Conditions</th>
+            <th>Temp</th>
+            <th>Description</th>
+            <th>Wind</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr id="todayForecastRow">
+            <td class="days" id="today">Today</td>
+
+            <td class="icon">
+              <div id="todayIcon"></div>
+            </td>
+
+            <td class="forecastTempCSS">
+              <p id="todayTemp">Temp</p>
+            </td>
+
+            <td class="forecastDataCSS capitalizeLetters">
+              <p id="todayWeatherDescrip">Weather Description</p>
+            </td>
+
+            <td class="forecastDataCSS">
+              <p id="todayWind">D XXX mph</p>
+            </td>
+          </tr>
+
+          <tr id="tonightForecastRow">
+            <td class="days" id="tonight">Tonight</td>
+
+            <td class="icon">
+              <div id="tonightIcon"></div>
+            </td>
+
+            <td class="forecastTempCSS">
+              <p id="tonightTemp">Temp</p>
+            </td>
+
+            <td class="forecastDataCSS capitalizeLetters">
+              <p id="tonightWeatherDescrip">Weather Description</p>
+            </td>
+
+            <td class="forecastDataCSS">
+              <p id="tonightWind">D XXX mph</p>
+            </td>
+          </tr>
+
+          <tr id="day2ForecastRow">
+            <td class="days" id="day2forecast">Day 2</td>
+
+            <td class="icon">
+              <div id="day2forecastIcon"></div>
+            </td>
+
+            <td class="forecastTempCSS">
+              <p id="day2forecastTemp">Temp</p>
+            </td>
+
+            <td class="forecastDataCSS capitalizeLetters">
+              <p id="day2forecastWeatherDescrip">Weather Description</p>
+            </td>
+
+            <td class="forecastDataCSS">
+              <p id="day2forecastWind">D XXX mph</p>
+            </td>
+          </tr>
+
+          <tr id="day3ForecastRow">
+            <td class="days" id="day3forecast">Day 3</td>
+
+            <td class="icon">
+              <div id="day3forecastIcon"></div>
+            </td>
+
+            <td class="forecastTempCSS">
+              <p id="day3forecastTemp">Temp</p>
+            </td>
+
+            <td class="forecastDataCSS capitalizeLetters">
+              <p id="day3forecastWeatherDescrip">Weather Description</p>
+            </td>
+
+            <td class="forecastDataCSS">
+              <p id="day3forecastWind">D XXX mph</p>
+            </td>
+          </tr>
+
+          <tr id="day4ForecastRow">
+            <td class="days" id="day4forecast">Day 4</td>
+
+            <td class="icon">
+              <div id="day4forecastIcon"></div>
+            </td>
+
+            <td class="forecastTempCSS">
+              <p id="day4forecastTemp">Temp</p>
+            </td>
+
+            <td class="forecastDataCSS capitalizeLetters">
+              <p id="day4forecastWeatherDescrip">Weather Description</p>
+            </td>
+
+            <td class="forecastDataCSS">
+              <p id="day4forecastWind">D XXX mph</p>
+            </td>
+          </tr>
+
+          <tr id="day5ForecastRow">
+            <td class="days" id="day5forecast">Day 5</td>
+
+            <td class="icon">
+              <div id="day5forecastIcon"></div>
+            </td>
+
+            <td class="forecastTempCSS">
+              <p id="day5forecastTemp">Temp</p>
+            </td>
+
+            <td class="forecastDataCSS capitalizeLetters">
+              <p id="day5forecastWeatherDescrip">weather description</p>
+            </td>
+
+            <td class="forecastDataCSS">
+              <p id="day5forecastWind">D XXX mph</p>
+            </td>
+          </tr>
+
+          <tr id="day6ForecastRow">
+            <td class="days" id="day6forecast">Day 6</td>
+
+            <td class="icon">
+              <div id="day6forecastIcon"></div>
+            </td>
+
+            <td class="forecastTempCSS">
+              <p id="day6forecastTemp">Temp</p>
+            </td>
+
+            <td class="forecastDataCSS capitalizeLetters">
+              <p id="day6forecastWeatherDescrip">weather description</p>
+            </td>
+
+            <td class="forecastDataCSS">
+              <p id="day6forecastWind">D XXX mph</p>
+            </td>
+          </tr>
+
+
+
+        </tbody>
+      </table>
+      <div>
+        <div>
+        </div>
+      </div>
+      <!-- End of weather row -->
+    </div>
+    <!-- End of weather container -->
+  </div>
+  <!--- End of mainPage-->
+
+  <!-- Current Details Popover-->
+  <div class="currentContent" style="display:none">
+    <div class="row">
+      <div class="col-xs-12">
+        <!-- Contains air pressure data -->
+        <p class="currentPop textCenter">Air Pressure</p>
+        <span class="currentPop"><p id="pressureNow" class = "textCenter">XXX  mbar</p></span>
+      </div>
+      <!-- Insert horizontal line here  -->
+      <hr class="hrPop">
+      <div>
+        <div class="col col-xs-12 col-md-6">
+          <p class="currentPop textCenter">Sunrise</p>
+          <span class="currentPop"><p id="sunrise" class = "textCenter">Time</p></span>
+        </div>
+        <div class="col col-xs-12 col-md-6">
+          <p class="currentPop textCenter">Sunset</p>
+          <span class="currentPop"><p id="sunset" class = "textCenter">Time</p></span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Precipitation Popover-->
+  <div class="precipContent" style="display:none">
+    <div class="row">
+      <div class="col-xs-12">
+        <!-- Contains air pressure data -->
+        <p class="currentPop textCenter">Cloud Cover</p>
+        <span class="currentPop"><p id="cloudNow" class = "textCenter">XXX %</p></span>
+      </div>
+      <!-- Insert horizontal line here  -->
+      <hr class="hrPop">
+      <div>
+        <div class="col col-xs-12 col-md-6">
+          <p class="currentPop textCenter">Rain</p>
+          <span class="currentPop"><p id="rainNow" class = "textCenter">Total mm</p></span>
+        </div>
+        <div class="col col-xs-12 col-md-6">
+          <p class="currentPop textCenter">Snow</p>
+          <span class="currentPop"><p id="snowNow" class ="textCenter">Total mm</p></span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+</body>
+
+</html>
+  <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js'></script>
+
+  
+
+    <script  src="js/index.js"></script>
+
+
+
+
+</body>
+
+</html>
