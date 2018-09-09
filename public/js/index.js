@@ -1,7 +1,8 @@
 $(document).ready(function() {
 
   // Initial settings
-  var units = "imperial";
+  //var units = "imperial";
+  var units = "celsius";
   var forecastFlag = 5;
     getLocation(units, forecastFlag);
 
@@ -36,17 +37,22 @@ function getLocation(units, forecastFlag) {
       } else {
         // Report error and assume a location of NYC
         console.log("Could not retrieve location. Using default");
-        countryCode = "US";
-        city = "New York";
-        regionCode = "NY";
-        zip = 10004;
-        lat = 40.71;
-        long = -74.00;
+        countryCode = "IN";
+        city = "New Delhi";
+        regionCode = "DL";
+        zip = 110062;
+        lat = 28.6;
+        long = 77.2;
       }
 
       // Push location information to page
       $('#location').html(locationAssign(country, countryCode, city, regionCode, zip));
       get5DayForecast(units, lat, long, city);
+     
+     // set city for graph1
+     // set city name
+    $('#citynameGraph1').html(city);
+    $('#citynameGraph2').html(city);
      
     });
 }
@@ -76,7 +82,10 @@ function get5DayForecast(units, lat, long) {
 
         //This is the function you are passing in, to be called once the first one completes
         function(forecastData) {
-
+          // generate graph
+          tempGraph1(forecastData); // for temperature
+          humidityGraph2(forecastData); // for humidity
+          
           forecastStartTime = convertUnixTime(forecastData.list[0].dt);
 
           // Fill the forecast arrays with data from the [2 PM, 11 PM, 2 PM, 2 PM, 2 PM, 2 PM, 2 PM]
@@ -561,4 +570,217 @@ function convertRain(rainfall, units) {
     // Rain is loaded in mm. Keep as is and return
     return rainfall.toFixed(1);
   }
+}
+
+function tempGraph1(forecastDataJson) {
+    
+    // setting the current date as required in plotOptions.series.pointStart
+    var d = new Date();
+    var year = d.getFullYear();
+    var month = d.getMonth();
+    var day = d.getDate();
+
+  // Chart options
+  var options = {
+      chart: {
+        height: 300
+      },
+      title: {
+          text: null
+          //x: -20 //center
+      },
+      subtitle: {
+          text: null
+
+      },
+      xAxis: {
+		type: 'datetime',
+		tickInterval:24 * 3600 * 1000 * 2,
+        tickPositioner: function(min, max){
+             var interval = this.options.tickInterval,
+                 ticks = [],
+                 count = 0;
+            
+            while(min < max) {
+                ticks.push(min);
+                min += interval;
+                count ++;
+            }
+            
+            ticks.info = {
+                unitName: 'day',
+                count: 2,
+                higherRanks: {},
+		        totalRange: interval * count
+            }
+
+            
+            return ticks;
+        }
+	},
+      yAxis: {
+          title: {
+              text: null
+          },
+          plotLines: [{
+              value: 0,
+              width: 1,
+              color: '#808080'
+          }],
+          labels: {
+            format: '{value} °C'
+          }
+      },
+      plotOptions: {
+            series: {
+                pointStart: Date.UTC(year, month, day),
+                pointInterval: 24 * 3600 * 1000  // one day
+              }
+        },
+      tooltip: {
+          valueSuffix: '°C'
+      },
+      legend: {
+          align: 'center',
+          borderWidth: 0
+      },
+      series: [{
+          name: 'Min temperature',
+          data: []
+      },
+      {
+        name: 'Max temperature',
+        data: [],
+        color: '#FF0000'
+        }]
+  }
+  
+   
+        var maxTemperatures = [];
+        var minTemperatures = [];
+       
+
+        var length = forecastDataJson.list.length;
+        for (var i = 0; i< length; i++) {
+          
+          //var maxTemp = json1.daily.data[i].temperatureMax;
+          //var minTemp = json1.daily.data[i].temperatureMin;
+          
+          var maxTemp = forecastDataJson.list[i].main.temp_max
+          var minTemp = forecastDataJson.list[i].main.temp_min
+         
+          maxTemp = Math.round(( maxTemp - 32) / 1.8 * 100) / 100;
+          minTemp = Math.round(( minTemp - 32) / 1.8 * 100) / 100;
+         
+          maxTemperatures.push(maxTemp);
+          minTemperatures.push(minTemp);
+         
+        }
+        // Adding data from weather API to options object for first chart.
+        options.series[0].data = minTemperatures;
+        options.series[1].data = maxTemperatures;
+        // rendering chart1
+        Highcharts.chart('chart1', options);
+}
+
+
+
+
+function humidityGraph2(forecastDataJson) {
+    
+    // setting the current date as required in plotOptions.series.pointStart
+    var d = new Date();
+    var year = d.getFullYear();
+    var month = d.getMonth();
+    var day = d.getDate();
+
+  // Chart options
+  var options = {
+      chart: {
+        height: 300
+      },
+      title: {
+          text: null
+          //x: -20 //center
+      },
+      subtitle: {
+          text: null
+
+      },
+      xAxis: {
+		type: 'datetime',
+		tickInterval:24 * 3600 * 1000 * 2,
+        tickPositioner: function(min, max){
+             var interval = this.options.tickInterval,
+                 ticks = [],
+                 count = 0;
+            
+            while(min < max) {
+                ticks.push(min);
+                min += interval;
+                count ++;
+            }
+            
+            ticks.info = {
+                unitName: 'day',
+                count: 2,
+                higherRanks: {},
+		        totalRange: interval * count
+            }
+
+            
+            return ticks;
+        }
+	},
+      yAxis: {
+          title: {
+              text: null
+          },
+          plotLines: [{
+              value: 0,
+              width: 1,
+              color: '#808080'
+          }],
+          labels: {
+            format: '{value} g/m3'
+          }
+      },
+      plotOptions: {
+            series: {
+                pointStart: Date.UTC(year, month, day),
+                pointInterval: 24 * 3600 * 1000  // one day
+              }
+        },
+      tooltip: {
+          valueSuffix: 'g/m3'
+      },
+      legend: {
+          align: 'center',
+          borderWidth: 0
+      },
+      series: [{
+          name: 'Humidity',
+          data: []
+      }]
+  }
+  
+   
+        var humidityData = [];
+       
+
+        var length = forecastDataJson.list.length;
+        for (var i = 0; i< length; i++) {
+          
+          var humidity = forecastDataJson.list[i].main.humidity;
+         
+          humidity = Math.round(humidity);
+          humidityData.push(humidity);
+          
+         
+        }
+        // Adding data from weather API to options object for first chart.
+        options.series[0].data = humidityData;
+       
+        // rendering chart1
+        Highcharts.chart('chart2', options);
 }

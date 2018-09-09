@@ -34,6 +34,13 @@ const init = async () => {
     handler: {
       file: 'index.html'
     }
+  },
+  {
+    method: 'GET',
+    path: '/home',
+    handler: {
+      file: 'home.html'
+    }
   },// Images
 
   {
