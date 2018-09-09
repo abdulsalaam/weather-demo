@@ -65,4 +65,41 @@ describe('## Weather Service', () => {
       nock.cleanAll()
     })
   })
+
+  describe('.getWeatherForecast', () => {
+    const lat = 19.04
+    const lon = 73.02
+
+    it('should return weather for the given lat and long', async () => {
+      // mock openWeatherAPI
+      nock(openWeatherHostname)
+        .get('/data/2.5/forecast')
+        .query({lat: lat, lon:lon, APPID: config.get('openWeather.apiKey')})
+        .reply(httpStatus.OK, apiResp)
+
+      const data = await weatherService.getWeatherForecast(lat,lon)
+      data.should.deep.equal(apiResp)
+
+      // clean all interceptors
+      nock.cleanAll()
+    })
+
+    it('should return error in case of non 200 response', async () => {
+      // mock openWeatherAPI
+      nock(openWeatherHostname)
+        .get('/data/2.5/forecast')
+        .query({lat: lat, lon:lon, APPID: config.get('openWeather.apiKey')})
+        .reply(httpStatus.INTERNAL_SERVER_ERROR)
+
+      try {
+        await weatherService.getWeatherForecast(lat,lon)
+      } catch (error) {
+        error.response.status.should.equal(httpStatus.INTERNAL_SERVER_ERROR)
+      }
+
+      // clean all interceptors
+      nock.cleanAll()
+    })
+  })
+
 })
